@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StepMania DDR</title>
+<link rel="stylesheet" href="style.css">
+    <!-- Audio & MIDI Engines -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://unpkg.com/@tonejs/midi"></script>
+</head>
+<body>
+<div id="game-container">
+        <canvas id="gameCanvas" width="375" height="667"></canvas>
+        <div id="touch-layer">
+            <div class="touch-col" id="col-0"></div>
+            <div class="touch-col" id="col-1"></div>
+            <div class="touch-col" id="col-2"></div>
+            <div class="touch-col" id="col-3"></div>
+</div>
+        
+        <!-- IN-GAME COMMAND BAR (Floating Top Layer) -->
+        <div id="game-overlay">
+            <button id="quick-restart-btn">RESTART</button>
+            <button id="abort-btn">EXIT</button>
+        </div>
+<!-- Practice Mode Controls -->
+        <div id="practice-ui" style="display:none;">
+            <div class="p-header">PRACTICE CONTROL</div>
+            <div class="p-content">
+                <div class="p-row">
+                    <span class="p-label">SPEED</span>
+                    <div class="p-speed-box">
+                        <button id="p-slower" class="p-btn">◄</button>
+                        <span id="p-speed-val">1.0x</span>
+                        <button id="p-faster" class="p-btn">►</button>
+                    </div>
+                </div>
+                <div class="p-actions">
+                    <button id="p-pause" class="p-btn">PAUSE</button>
+                    <button id="p-exit" class="p-btn p-exit">EXIT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="instructions">Use Arrow Keys or WASD to play!</div>
+    
+    <!-- UI Controls -->
+<div id="ui-layer">
+        <div id="main-menu">
+<div class="panel-header">
+                SELECT TRACK
+                <div id="filter-container">
+                    <label id="fav-filter-btn" class="filter-btn">
+                        <input type="checkbox" id="fav-toggle">
+                        <span>♥ ONLY</span>
+                    </label>
+                </div>
+            </div>
+            <div id="mode-selection">
+                <label class="mode-btn"><input type="radio" name="gameMode" value="STANDARD" checked><span>STANDARD</span></label>
+                <label class="mode-btn"><input type="radio" name="gameMode" value="LEARN"><span>LEARN</span></label>
+                <label class="mode-btn"><input type="radio" name="gameMode" value="PRACTICE"><span>PRACTICE</span></label>
+            </div>
+            <div id="song-list">
+                <div class="loading-text">CONNECTING TO ARCHIVE...</div>
+            </div>
+            <div id="score-panel">
+                <div class="score-label">HIGH SCORE</div>
+                <div id="high-score-val">000000</div>
+</div>
+            <div id="results-panel" style="display: none;">
+                <div class="panel-header">TRACK COMPLETE</div>
+                <div class="result-row">SCORE: <span id="result-score">000000</span></div>
+<div class="result-row">RANK: <span id="result-rank">F</span></div>
+                <div id="result-buttons">
+                    <button id="retry-btn">RETRY</button>
+<button id="menu-btn">BACK</button>
+                </div>
+            </div>
+        </div>
+<!-- Overlay moved to game-container -->
+        
+<!-- Practice Mode Controls Removed from here -->
+
+        <div id="status">INITIALIZING SYSTEM...</div>
+        
+</div>
+
+<!-- Practice Mode Controls (Moved inside Game Container for correct positioning) -->
+    <!-- Removed from here, will insert into game-container -->
+
+    <!-- Scripts moved to bottom to ensure DOM is ready -->
+    <script src="midi_manager.js"></script>
+    <script src="game.js"></script>
+    <script src="game_watcher.js"></script>
+    <script src="touch_controls.js"></script>
+</body>
+</html>

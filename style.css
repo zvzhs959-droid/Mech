@@ -1,0 +1,692 @@
+/* PERSONA 5 INSPIRED STYLES */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:wght@700&display=swap');
+
+* { box-sizing: border-box; } /* GLOBAL FIX: Ensure padding doesn't break widths */
+
+:root {
+    --p5-red: #d60000;
+    --p5-black: #0a0a0a;
+    --p5-white: #f5f5f5;
+    --p5-yellow: #ffe600;
+    --p5-gray: #2d2d2d;
+    --p5-accent: #00f0ff; /* Cyber accent */
+}
+
+@keyframes bg-scroll {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 40px 40px, 0 0; }
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1a1a1a;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(214, 0, 0, 0.1) 0%, rgba(0,0,0,0.8) 80%),
+        repeating-linear-gradient(45deg, #111 0, #111 2px, transparent 2px, transparent 8px);
+    font-family: 'Roboto Condensed', sans-serif;
+    color: var(--p5-black);
+}
+
+/* Halftone Overlay Pattern - Animated */
+/* MASSIVE UPDATE: CRT SCANLINE OVERLAY */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 9999; /* Top of everything */
+    opacity: 0.4;
+}
+
+/* GAME CONTAINER (Holds Canvas + Touch Layer) */
+/* GAME CONTAINER (Holds Canvas + Touch Layer) */
+#game-container {
+    position: relative;
+    width: 375px;
+    height: 667px;
+    transform: rotate(-1deg);
+    box-shadow: 
+        15px 15px 0px rgba(0,0,0,0.6),
+        0 0 0 4px var(--p5-black),
+        0 0 20px rgba(214, 0, 0, 0.3); /* Glow */
+    border: 4px solid var(--p5-black);
+    background-color: #000;
+    z-index: 10;
+    overflow: hidden; /* Clean edges */
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    touch-action: none;
+}
+
+/* Touch Feedback Overlay */
+#touch-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: auto;
+    z-index: 50;
+    display: flex;
+    touch-action: none;
+}
+
+.touch-col {
+    flex: 1;
+    border-right: 1px solid rgba(255,255,255,0.05);
+transition: background 0.05s, box-shadow 0.05s;
+    will-change: background, box-shadow; /* GPU Hint */
+    position: relative;
+}
+.touch-col:last-child { border: none; }
+
+/* ACTIVE STATE - HIGH ENERGY */
+.touch-col.active {
+    background: linear-gradient(to bottom, rgba(255, 230, 0, 0.4) 0%, rgba(214, 0, 0, 0.1) 100%);
+    box-shadow: inset 0 0 30px rgba(255, 230, 0, 0.6);
+    border-right: 1px solid rgba(255, 255, 255, 0.8);
+    animation: neonPulse 0.1s infinite alternate; /* HERCULEAN ENERGY */
+}
+
+/* The "Impact" Bar at the bottom */
+.touch-col.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 8px;
+    background: #fff;
+    box-shadow: 
+        0 0 10px #fff, 
+        0 0 20px var(--p5-yellow),
+        0 0 40px var(--p5-red);
+}
+
+@keyframes neonPulse {
+    from { opacity: 0.8; }
+    to { opacity: 1.0; filter: brightness(1.2); }
+}
+
+/* UI LAYER */
+#ui-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+/* backdrop-filter: blur(2px); REMOVED for Performance on Old Devices */
+    background: rgba(0, 0, 0, 0.3); /* Fallback tint */
+    transition: opacity 0.3s;
+}
+
+/* MAIN MENU CARD */
+/* MAIN MENU CARD */
+#main-menu {
+    pointer-events: auto;
+    background: var(--p5-black);
+    color: var(--p5-white);
+    width: 390px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    transform: skewX(-2deg);
+    border: none;
+    /* More Aggressive Jagged Cutout */
+    clip-path: polygon(
+        0% 0%, 95% 0%, 
+        100% 5%, 100% 98%, 
+        98% 100%, 2% 100%, 
+        0% 95%
+    );
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header */
+.panel-header {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    font-family: 'Anton', sans-serif;
+    font-size: 32px;
+    padding: 15px 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: skewX(2deg); /* Counter skew */
+    margin-bottom: 15px;
+    border-bottom: 6px solid var(--p5-red);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+}
+
+/* Mode Selection */
+#mode-selection {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid var(--p5-gray);
+}
+
+.mode-btn {
+    cursor: pointer;
+    position: relative;
+}
+
+.mode-btn input {
+    display: none;
+}
+
+.mode-btn span {
+    display: block;
+padding: 12px 16px; /* Increased padding for easier touch */
+    background: var(--p5-black);
+    color: #888;
+    border: 1px solid #444;
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    transform: skewX(-10deg);
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.mode-btn input:checked + span {
+    background: var(--p5-yellow);
+    color: var(--p5-black);
+    border-color: var(--p5-white);
+    transform: skewX(-10deg) translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--p5-red);
+}
+
+.mode-btn:hover span {
+    color: var(--p5-white);
+    border-color: var(--p5-white);
+}
+
+/* Filter Toggle */
+
+/* Filter Toggle */
+#filter-container {
+    font-size: 14px;
+}
+
+.filter-btn {
+    cursor: pointer;
+    background: var(--p5-black);
+    color: var(--p5-white);
+    padding: 4px 8px;
+    border: 2px solid var(--p5-black);
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.filter-btn input { display: none; }
+.filter-btn:hover { background: var(--p5-red); color: var(--p5-white); }
+.filter-btn input:checked + span { color: var(--p5-yellow); }
+
+/* Song List */
+#song-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 5px;
+    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+}
+#song-list::-webkit-scrollbar { display: none; }
+
+/* Song Item */
+/* Song Item - Jagged Strips */
+/* Song Item - Jagged Strips */
+.song-item {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    margin-bottom: 15px;
+    padding: 15px 25px;
+    cursor: pointer;
+    
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    
+    transform: skewX(-5deg);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+    border: none;
+    position: relative;
+    min-height: 75px;
+    overflow: hidden;
+    
+    /* The "Torn Paper" Shape - Enhanced */
+    clip-path: polygon(
+        2% 0%, 100% 0%, 
+        98% 100%, 0% 95%
+    );
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.3); /* Note: clip-path hides this, but keeping for fallback */
+}
+
+.song-item:hover {
+    background: var(--p5-black);
+    color: var(--p5-white);
+    transform: skewX(-5deg) translateX(10px) scale(1.02);
+}
+.song-item:hover .star-rating { color: var(--p5-yellow); }
+
+.song-item.active {
+    background: var(--p5-black) !important;
+    color: var(--p5-yellow) !important;
+    transform: skewX(-5deg) translateX(15px);
+    clip-path: polygon(
+        0% 0%, 100% 5%, 
+        95% 100%, 5% 95%
+    );
+    border-left: 10px solid var(--p5-red);
+}
+
+/* --- REPAIR STRATEGY FOR BROKEN/FLATTENED HTML --- */
+
+/* 1. THE NAME (First Element) */
+/* Targets both .song-content AND any raw div the JS inserts first */
+.song-item > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0; /* Allow truncation */
+    
+    /* Enforce Font - EXACTLY AS REQUESTED */
+    font-family: 'Anton', sans-serif !important;
+    font-size: 20px !important;
+    text-transform: uppercase !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    
+    /* Ensure it doesn't overlap the absolute positioned score */
+    padding-bottom: 14px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 2. THE SCORE (Second Element - if flattened) */
+/* If the JS inserts the score as a sibling div */
+.song-item > div:nth-child(2):not(.song-meta) {
+    position: absolute !important;
+    bottom: 8px;
+    left: 12px;
+    
+    font-family: 'Roboto Condensed', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    opacity: 0.8;
+    color: inherit;
+    pointer-events: none;
+}
+
+/* 3. THE METADATA (Right Column) */
+/* If the structure is clean, this handles Stars + Heart */
+.song-meta {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding-left: 10px;
+    z-index: 5;
+}
+
+/* 4. THE "GHOST" HEART REMOVAL */
+/* User said: "don't add that single black heart underneath the track name" */
+/* We hide any fav-icon that is a DIRECT child (loose element), preserving the one inside .song-meta */
+.song-item > .fav-icon {
+    display: none !important;
+}
+
+/* 5. STAR RATING PRESERVATION */
+.star-rating {
+    font-family: sans-serif; /* Fallback */
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: -2px;
+    color: inherit;
+    margin-bottom: 2px;
+}
+
+/* 6. CLEANUP INNER TEXT */
+/* Ensure the name text itself inherits the Anton font */
+.song-name,
+.song-item > div:first-child > div {
+    font-family: 'Anton', sans-serif !important;
+    font-size: 20px !important;
+}
+
+.star-rating {
+    position: relative;
+    color: var(--p5-black);
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: -2px;
+    pointer-events: none;
+    margin-bottom: 4px; /* Space between stars and heart */
+    line-height: 1;
+}
+.song-item:hover .star-rating { color: var(--p5-yellow); }
+.song-item.active .star-rating { color: var(--p5-yellow); }
+
+/* Favorite Icon - In Flow */
+.fav-icon {
+    position: relative;
+    font-size: 22px;
+    color: rgba(0,0,0,0.1);
+    transition: 0.2s;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px;
+}
+.fav-icon:hover { 
+    transform: scale(1.2); 
+    color: var(--p5-red); 
+    opacity: 1;
+}
+.fav-icon.is-fav { 
+    color: var(--p5-red); 
+    opacity: 1;
+    text-shadow: none; /* Removed weird shadow */
+}
+.song-item:hover .fav-icon {
+    color: rgba(0,0,0,0.3); /* Visible on hover */
+}
+.song-item:hover .fav-icon.is-fav {
+    color: var(--p5-red);
+}
+/* Score Panel */
+/* Score Panel */
+/* Score Panel */
+#score-panel {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    padding: 10px;
+    text-align: center;
+    transform: skewX(-10deg) rotate(-2deg);
+    margin-top: 20px;
+    clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    border: 3px solid var(--p5-black);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
+}
+
+.score-label {
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--p5-gray);
+    margin-bottom: 5px;
+}
+
+#high-score-val {
+    font-family: 'Anton', sans-serif;
+    font-size: 48px; /* Bigger */
+    color: var(--p5-red);
+    line-height: 0.9;
+    text-shadow: 3px 3px 0 var(--p5-black), 0 0 10px rgba(214, 0, 0, 0.5); /* Glow + Shadow */
+    letter-spacing: 2px;
+}
+
+/* Results Panel */
+#results-panel {
+    display: none;
+    text-align: center;
+    width: 100%;
+    transform: skewX(5deg);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: skewX(5deg) scale(0.8); opacity: 0; }
+    100% { transform: skewX(5deg) scale(1); opacity: 1; }
+}
+
+.result-row {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px;
+    margin: 15px 0;
+    background: var(--p5-white);
+    color: var(--p5-black);
+    padding: 10px;
+    transform: rotate(-2deg);
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.8);
+    border: 2px solid var(--p5-black);
+}
+
+#result-rank {
+    font-size: 80px;
+    color: var(--p5-red);
+    text-shadow: 5px 5px 0 var(--p5-black);
+    display: block;
+    margin-top: -10px;
+}
+
+#result-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    border: 2px solid var(--p5-black);
+    padding: 15px;
+    cursor: pointer;
+    transform: skewX(-10deg);
+    transition: 0.1s;
+    letter-spacing: 1px;
+}
+
+#retry-btn {
+    background: var(--p5-yellow);
+    color: var(--p5-black);
+    box-shadow: 6px 6px 0 var(--p5-black);
+}
+#retry-btn:hover { 
+    transform: skewX(-10deg) translate(-4px, -4px); 
+    box-shadow: 10px 10px 0 var(--p5-black); 
+}
+#retry-btn:active { 
+    transform: skewX(-10deg) translate(2px, 2px); 
+    box-shadow: 2px 2px 0 var(--p5-black); 
+}
+
+#menu-btn {
+    background: var(--p5-black);
+    color: var(--p5-white);
+    border: 2px solid var(--p5-white);
+    box-shadow: 6px 6px 0 rgba(255,255,255,0.2);
+}
+#menu-btn:hover { 
+    background: var(--p5-gray); 
+    transform: skewX(-10deg) translate(-2px, -2px);
+}
+/* In-Game Overlay */
+/* In-Game Overlay - Floating Command Bar */
+#game-overlay {
+    position: absolute;
+    top: 10px; /* Slight offset from very top edge */
+    left: 0;
+    width: 100%;
+    padding: 0 15px; /* Side padding */
+z-index: 1001; /* Above everything including Practice UI */
+    display: flex;
+    justify-content: space-between; /* Push buttons to corners */
+    pointer-events: none; /* Crucial: allows touching arrows between buttons */
+}
+
+#game-overlay button {
+    pointer-events: auto; /* Re-enable clicking JUST the buttons */
+    font-family: 'Anton', sans-serif;
+    font-size: 14px; /* Slightly smaller to save screen real estate */
+padding: 12px 20px; /* Larger touch targets for mobile reliability */
+    border: 2px solid var(--p5-black);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    text-transform: uppercase;
+    transform: skewX(-10deg);
+    transition: transform 0.1s, box-shadow 0.1s;
+    opacity: 0.9; /* Slight transparency to see arrows behind if needed */
+}
+
+#game-overlay button:active {
+    transform: skewX(-10deg) translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+
+#abort-btn {
+    background: var(--p5-red);
+    color: var(--p5-white);
+}
+
+#quick-restart-btn {
+    background: var(--p5-yellow);
+    color: var(--p5-black);
+}
+
+#status {
+    background: var(--p5-black);
+    color: var(--p5-yellow);
+    padding: 5px 10px;
+    font-weight: bold;
+    transform: skewX(-10deg);
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* Instructions */
+#instructions {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Anton', sans-serif;
+    font-size: 20px;
+    color: var(--p5-white);
+    text-shadow: 2px 2px 0 var(--p5-black);
+    pointer-events: none;
+    z-index: 5;
+    transform: rotate(-1deg);
+/* Practice Mode UI */
+/* Practice Mode UI */
+/* Practice Mode Window */
+#practice-ui {
+    position: absolute;
+    top: 150px; /* Moved to upper area to avoid bottom screen clipping/toolbars */
+    left: 50%;
+    transform: translateX(-50%) skewX(-5deg);
+    width: 340px;
+    background: var(--p5-black);
+    border: 3px solid var(--p5-white);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 1000; /* Ensure it's on top of everything */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Anton', sans-serif;
+}
+
+.p-header {
+    background: var(--p5-white);
+    color: var(--p5-black);
+    padding: 8px 15px;
+    font-size: 20px;
+    border-bottom: 3px solid var(--p5-red);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.p-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.p-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--p5-white);
+    font-size: 20px;
+}
+
+.p-speed-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #333;
+    padding: 5px;
+    border: 1px solid #666;
+    transform: skewX(5deg); /* Counter skew */
+}
+
+.p-btn {
+    background: var(--p5-black);
+    color: var(--p5-white);
+    border: 1px solid var(--p5-white);
+    padding: 15px 20px; /* Larger hit area */
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Anton', sans-serif;
+    min-width: 50px;
+    transition: 0.1s;
+    text-align: center;
+    touch-action: manipulation;
+}
+
+.p-btn:active {
+    background: var(--p5-yellow);
+    color: var(--p5-black);
+    transform: translate(2px, 2px);
+}
+
+.p-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.p-actions .p-btn {
+    flex: 1;
+    padding: 12px;
+    font-size: 20px;
+    transform: skewX(5deg);
+}
+
+.p-exit {
+    background: var(--p5-red);
+    border-color: var(--p5-black);
+}
+
+/* Repo section headers (song list) */
+.repo-header{
+  padding: 8px 10px;
+  margin-top: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #0ff;
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
